@@ -1,2 +1,1 @@
-# abm
-Agent based modeling in R
+# Agent based modeling in R
