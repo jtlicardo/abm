@@ -47,6 +47,8 @@ Ovaj proces ponavlja se za svaki dan simulacije, čime se prati dinamika širenj
 
 Implementacija je napisana u R-u, a za vizualizaciju rezultata koristi se paket `ggplot2`. Ključni elementi koda objašnjeni su komentarima radi jasnoće.
 
+\bigskip
+
 U sljedećem dijelu koda postavljamo parametre simulacije poput veličine populacije, početnog broja zaraženih, vjerojatnosti zaraze, stope oporavka i smrtnosti te broja dana simulacije. Također, generiramo podatke o dobnim skupinama, stopama kontakata i podložnosti za svakog pojedinca.
 
 ```{r}
@@ -75,6 +77,21 @@ contact_rate <- ifelse(age_groups == "0-19",6,
 susceptibility <- ifelse(age_groups == "60+", 1.5, 1)
 ```
 
+\bigskip
 
+Ovdje inicijaliziramo status svakog pojedinca - većina je podložna, a nekolicina je nasumično odabrana kao inicijalno zaražena. Također kreiramo podatkovnu strukturu za praćenje broja podložnih, zaraženih, oporavljenih i umrlih tijekom simulacije.
+
+```{r}
+# Inicijalizacija statusa pojedinaca i podataka  
+status <- rep("susceptible", population_size)
+status[sample(population_size, initial_infected)] <- "infected"
+
+data <- data.frame(
+  day = 0,
+  susceptible = population_size - initial_infected,
+  infected = initial_infected,
+  recovered = 0,
+  dead = 0)
+```
 
 
