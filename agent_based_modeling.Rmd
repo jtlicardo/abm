@@ -5,7 +5,7 @@ date: "`r format(Sys.Date(), '%d. %B %Y.')`"
 output: 
   pdf_document:
     toc: true
-    toc_depth: 3
+    toc_depth: 2
 toc-title: "Sadržaj"
 ---
 
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 \newpage
 
-## Uvod
+# Uvod
 
 Modeliranje temeljeno na agentima (ABM) je računalna metoda simulacije u kojoj se modeliraju akcije i interakcije autonomnih agenata s ciljem procjene njihovih učinaka na sustav kao cjelinu. Agenti mogu biti pojedinci, organizacije, računala ili bilo koji drugi entitet koji donosi odluke i samostalno djeluje. ABM se koristi za proučavanje složenih sustava u različitim područjima, uključujući epidemiologiju, ekonomiju, sociologiju, biologiju i mnoga druga.
 
@@ -28,7 +28,7 @@ U ovom projektu, koristimo ABM za simulaciju širenja epidemije u populaciji. Na
 
 Cilj ovog projekta je proučiti dinamiku širenja epidemije u populaciji i analizirati utjecaj različitih parametara na tijek epidemije. Rezultati simulacije vizualizirani su pomoću grafova izrađenih u R-u uz pomoć paketa `ggplot2`.
 
-## Podaci
+# Podaci
 
 Generirali smo skup podataka koji predstavlja populaciju od 1000 pojedinaca s različitim karakteristikama:
 
@@ -39,7 +39,7 @@ Generirali smo skup podataka koji predstavlja populaciju od 1000 pojedinaca s ra
 
 Nakon generiranja ovih podataka, simulacija prati promjene u stanju svakog pojedinca kroz iteracije, uzimajući u obzir parametre poput stope zaraze, oporavka i smrtnosti. Rezultati se bilježe u podacima koji se kasnije vizualiziraju.
 
-## Implementacija simulacije
+# Implementacija simulacije
 
 Simulacija epidemije implementirana je kroz iterativni proces koji se provodi kroz određeni broj dana (u ovom slučaju 100 dana). Svaki dan simulacije prolazi kroz sljedeće korake:
 
@@ -163,11 +163,11 @@ Ovaj proces se ponavlja za svaki dan simulacije, omogućavajući praćenje dinam
 
 \newpage
 
-## Vizualizacija rezultata
+# Vizualizacija rezultata
 
 \bigskip
 
-### Dinamika širenja epidemije
+## Dinamika širenja epidemije
 
 ```{r}
 ggplot(data, aes(x = day)) +
@@ -191,7 +191,7 @@ Zelena linija predstavlja broj oporavljenih pojedinaca tijekom vremena, dok crna
 
 \bigskip
 
-### Dnevni broj novozaraženih, oporavljenih i umrlih
+## Dnevni broj novozaraženih, oporavljenih i umrlih
 
 ```{r}
 data$new_infected <- c(NA, diff(data$infected) + diff(data$recovered) + diff(data$dead))
@@ -226,7 +226,7 @@ Analizom ovih dnevnih brojeva možemo pratiti dinamiku širenja epidemije i uoč
 
 \bigskip
 
-### Kumulativni broj slučajeva (zaraženih, oporavljenih i umrlih)
+## Kumulativni broj slučajeva (zaraženih, oporavljenih i umrlih)
 
 ```{r}
 data$cumulative_cases <- data$infected + data$recovered + data$dead
@@ -244,7 +244,7 @@ U određenoj točki, krivulja dostiže svoj maksimum, što označava vrhunac epi
 
 \bigskip
 
-### Distribucija smrtnosti po dobnim skupinama
+## Distribucija smrtnosti po dobnim skupinama
 
 ```{r}
 age_death_data <- data.frame(
@@ -270,6 +270,18 @@ Ovaj grafikon prikazuje distribuciju smrtnih slučajeva po dobnim skupinama u ov
 Podaci za ovaj grafikon generirani su u prvom dijelu koda, gdje se stvara nova podatkovna struktura `age_death_data` koja sadrži dobne skupine i odgovarajući broj smrtnih slučajeva za svaku skupinu. Petlja prolazi kroz jedinstvene dobne skupine i računa broj smrtnih slučajeva za svaku od njih sumiranjem pojedinaca koji imaju status "dead" u toj dobnoj skupini.
 
 Nakon toga, koristi se `ggplot2` za crtanje stupčastog grafikona. Na x-osi nalaze se dobne skupine, a na y-osi broj smrtnih slučajeva.
+
+\newpage
+
+# Zaključak
+
+Ova simulacija epidemije temeljena na agentima pruža uvid u dinamiku širenja zarazne bolesti u populaciji od 1000 pojedinaca podijeljenih u četiri dobne skupine. Korištenjem parametara poput stope zaraze, oporavka, smrtnosti i kontakata među pojedincima, model prati promjene u statusu svakog pojedinca tijekom 100 dana simulacije.
+
+Vizualizacije rezultata, uključujući grafikon širenja epidemije, dnevne brojeve novih slučajeva, kumulativni broj slučajeva i distribuciju smrtnosti po dobnim skupinama, pružaju sveobuhvatan pregled tijeka epidemije i njenog utjecaja na populaciju.
+
+Ovakve simulacije mogu biti korisne za predviđanje potencijalnih obrazaca širenja epidemije, procjenu opterećenja na zdravstveni sustav i testiranje različitih strategija suzbijanja širenja bolesti. Međutim, važno je napomenuti da se radi o pojednostavljenom modelu koji ne uzima u obzir sve kompleksnosti stvarnih epidemioloških procesa.
+
+Budući razvoj ovog modela mogao bi uključiti dodatne čimbenike poput geografske raspodjele populacije, različitih načina prijenosa bolesti, utjecaja mjera poput karantene ili cijepljenja, kao i detaljnije modeliranje zdravstvenih kapaciteta i resursa. Kontinuirano unaprjeđivanje i validacija modela pomoću stvarnih podataka ključni su za povećanje njegove točnosti i praktične primjenjivosti.
 
 
 
