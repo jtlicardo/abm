@@ -94,4 +94,64 @@ data <- data.frame(
   dead = 0)
 ```
 
+\bigskip
+
+Glavna simulacija epidemije implementirana je kroz sljedeću petlju koja iterira kroz sve dane (`num_days`):
+
+```{r}
+set.seed(123)
+
+for (day in 1:num_days) {
+  
+  # Inicijalizacija brojača za novi dan
+  new_infected <- 0
+  new_recovered <- 0
+  new_dead <- 0
+  
+  for (i in 1:population_size) {
+    if (status[i] == "infected") {
+      
+      # Simulacija ishoda za zaraženog pojedinca
+      if (runif(1) < death_rate) {
+        status[i] <- "dead"
+        new_dead <- new_dead + 1
+      } else if (runif(1) < recovery_rate) {
+        status[i] <- "recovered"
+        new_recovered <- new_recovered + 1
+      } else {
+        
+        # Zaraza podložnih kontakata
+        contacts <- sample(population_size, contact_rate[i], replace = TRUE)
+        for (contact in contacts) {
+          if (status[contact] == "susceptible" &&
+              runif(1) < infection_prob * susceptibility[contact]) {
+            status[contact] <- "infected"
+            new_infected <- new_infected + 1
+          }
+        }
+      }
+    }
+  }
+  
+  # Ažuriranje ukupnih brojeva nakon dana simulacije
+  susceptible_count <- sum(status == "susceptible")
+  infected_count <- sum(status == "infected")
+  recovered_count <- sum(status == "recovered")
+  dead_count <- sum(status == "dead")
+  
+  # Spremanje rezultata za taj dan
+  data <- rbind(data, data.frame(
+    day = day,
+    susceptible = susceptible_count,
+    infected = infected_count,
+    recovered = recovered_count,
+    dead = dead_count))
+}
+```
+
+Unutarnja petlja prolazi kroz svakog pojedinca. Za zaražene pojedince, simulira se ishod njihove bolesti - mogu umrijeti, oporaviti se ili ostati zaraženi. Ako ostanu zaraženi, oni mogu zaraziti podložne pojedince s kojima su u kontaktu, ovisno o stopama zaraze i podložnosti.
+
+Nakon prolaska kroz sve pojedince, ukupni brojevi podložnih, zaraženih, oporavljenih i umrlih se ažuriraju i spremaju u podatkovnu strukturu `data` za taj dan simulacije.
+
+Ovaj proces se ponavlja za svaki dan simulacije, omogućavajući praćenje dinamike epidemije tijekom vremena.
 
