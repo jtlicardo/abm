@@ -2,12 +2,18 @@
 title: "Agent-based modeli u R-u"
 author: "Alan Bubalo, Josip Tomo Licardo"
 date: "`r format(Sys.Date(), '%d. %B %Y.')`"
-output: pdf_document
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 3
+toc-title: "Sadržaj"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+\newpage
 
 ## Uvod
 
@@ -218,6 +224,23 @@ Crna linija prikazuje dnevni broj smrtnih slučajeva tijekom simulacije. Iako je
 
 Analizom ovih dnevnih brojeva možemo pratiti dinamiku širenja epidemije i uočiti kritične točke poput vrhunca novih zaraza ili dana s najviše smrtnih slučajeva. Ovi podaci mogu biti korisni za procjenu opterećenja zdravstvenog sustava i planiranje odgovarajućih mjera za suzbijanje epidemije.
 
+\bigskip
+
+### Kumulativni broj slučajeva (zaraženih, oporavljenih i umrlih)
+
+```{r}
+data$cumulative_cases <- data$infected + data$recovered + data$dead
+
+ggplot(data, aes(x = day, y = cumulative_cases)) +
+  geom_line(colour = "purple") +
+  labs(title = "Cumulative Cases Over Time", x = "Day", y = "Cumulative Number of Cases")
+```
+
+Ovaj grafikon prikazuje kumulativni broj slučajeva (zaraženih, oporavljenih i umrlih) tijekom trajanja simulacije epidemije. Krivulja predstavlja zbroj zaraženih, oporavljenih i umrlih pojedinaca za svaki dan simulacije.
+
+Linija je izražena u ljubičastoj boji, a na x-osi se nalazi broj dana simulacije, dok y-os prikazuje kumulativni broj slučajeva. Na početku simulacije, krivulja je ravna, jer postoji samo mali broj inicijalno zaraženih pojedinaca. Kako se epidemija širi, krivulja postaje sve strmija, pokazujući brzi rast ukupnog broja slučajeva.
+
+U određenoj točki, krivulja dostiže svoj maksimum, što označava vrhunac epidemije kada je ukupni broj slučajeva najveći. Nakon toga, krivulja nastavlja rasti, ali sporijom stopom, s obzirom da se većina zaraženih ljudi ili oporavila ili preminula.
 
 
 
