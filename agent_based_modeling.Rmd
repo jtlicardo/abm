@@ -1,5 +1,7 @@
 ---
 title: "Agent-based modeli u R-u"
+author: "Alan Bubalo, Josip Tomo Licardo"
+date: "`r format(Sys.Date(), '%d. %B %Y.')`"
 output: pdf_document
 ---
 
@@ -9,4 +11,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Uvod
 
-...
+Modeliranje temeljeno na agentima (ABM) je računalna metoda simulacije u kojoj se modeliraju akcije i interakcije autonomnih agenata s ciljem procjene njihovih učinaka na sustav kao cjelinu. Agenti mogu biti pojedinci, organizacije, računala ili bilo koji drugi entitet koji donosi odluke i samostalno djeluje. ABM se koristi za proučavanje složenih sustava u različitim područjima, uključujući epidemiologiju, ekonomiju, sociologiju, biologiju i mnoga druga.
+
+U ovom projektu, koristimo ABM za simulaciju širenja epidemije u populaciji. Naš model uključuje sljedeće elemente:
+
+1. Populacija: Simuliramo populaciju od 1000 pojedinaca podijeljenih u četiri dobne skupine: 0-19, 20-39, 40-59 i 60+.
+2. Stanje pojedinca: Svaki pojedinac može biti u jednom od četiri stanja: podložan (susceptible), zaražen (infected), oporavljen (recovered) ili mrtav (dead).
+3. Parametri: Model koristi nekoliko parametara, uključujući stopu zaraze, stopu oporavka, stopu smrtnosti i stopu kontakata među pojedincima različitih dobnih skupina.
+4. Dinamika širenja bolesti: U svakom koraku simulacije, zaraženi pojedinci mogu zaraziti podložne pojedince s kojima su u kontaktu, oporaviti se ili umrijeti. Stopa zaraze ovisi o dobi i podložnosti svakog pojedinca.
+
+Cilj ovog projekta je proučiti dinamiku širenja epidemije u populaciji i analizirati utjecaj različitih parametara na tijek epidemije. Rezultati simulacije vizualizirani su pomoću grafova izrađenih u R-u uz pomoć paketa `ggplot2`.
