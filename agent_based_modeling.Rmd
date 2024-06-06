@@ -21,3 +21,60 @@ U ovom projektu, koristimo ABM za simulaciju širenja epidemije u populaciji. Na
 4. Dinamika širenja bolesti: U svakom koraku simulacije, zaraženi pojedinci mogu zaraziti podložne pojedince s kojima su u kontaktu, oporaviti se ili umrijeti. Stopa zaraze ovisi o dobi i podložnosti svakog pojedinca.
 
 Cilj ovog projekta je proučiti dinamiku širenja epidemije u populaciji i analizirati utjecaj različitih parametara na tijek epidemije. Rezultati simulacije vizualizirani su pomoću grafova izrađenih u R-u uz pomoć paketa `ggplot2`.
+
+## Podaci
+
+Generirali smo skup podataka koji predstavlja populaciju od 1000 pojedinaca s različitim karakteristikama:
+
+1. Dobne skupine: Pojedincima je nasumično dodijeljena dobna skupina iz skupa {"0-19", "20-39", "40-59", "60+"} koristeći unaprijed zadane vjerojatnosti za svaku dobnu skupinu.
+2. Stopa kontakata: Ovisno o dobi pojedinca, dodijeljena mu je odgovarajuća stopa kontakata koja određuje prosječan broj drugih pojedinaca s kojima će biti u kontaktu. Mlađe dobne skupine imaju višu stopu kontakata.
+3. Podložnost: Pojedincima starije dobi (60+) dodijeljena je viša podložnost zarazi u usporedbi s mlađim dobnim skupinama.
+4. Inicijalno stanje: Nasumično je odabrano 10 pojedinaca koji su inicijalno bili zaraženi, dok su svi ostali bili podložni zarazi.
+
+Nakon generiranja ovih podataka, simulacija prati promjene u stanju svakog pojedinca kroz iteracije, uzimajući u obzir parametre poput stope zaraze, oporavka i smrtnosti. Rezultati se bilježe u podacima koji se kasnije vizualiziraju.
+
+## Implementacija simulacije
+
+Simulacija epidemije implementirana je kroz iterativni proces koji se provodi kroz određeni broj dana (u ovom slučaju 100 dana). Svaki dan simulacije prolazi kroz sljedeće korake:
+
+* Inicijalizacija novih brojača: Na početku dana, brojači za novozaražene, oporavljene i umrle osobe postavlje se na nulu.
+* Ažuriranje stanja pojedinaca: Za svakog zaraženog pojedinca, simulira se ishod njihove bolesti. Ovisno o stopama oporavka i smrtnosti, pojedinac može ozdraviti, umrijeti ili ostati zaražen.
+* Širenje zaraze: Ako zaraženi pojedinac ostane zaražen, on može zaraziti podložne pojedince s kojima je u kontaktu. Vjerojatnost zaraze ovisi o stopi zaraze i podložnosti svakog podložnog pojedinca.
+* Ažuriranje ukupnih brojeva: Nakon prolaska kroz sve pojedince, ukupni brojevi podložnih, zaraženih, oporavljenih i umrlih osoba ažuriraju se prema promjenama koje su se dogodile tijekom tog dana.
+* Spremanje rezultata: Rezultati za taj dan, uključujući brojeve podložnih, zaraženih, oporavljenih i umrlih, spremaju se u podatkovnu strukturu.
+
+Ovaj proces ponavlja se za svaki dan simulacije, čime se prati dinamika širenja epidemije u populaciji tijekom vremena.
+
+Implementacija je napisana u R-u, a za vizualizaciju rezultata koristi se paket `ggplot2`. Ključni elementi koda objašnjeni su komentarima radi jasnoće.
+
+U sljedećem dijelu koda postavljamo parametre simulacije poput veličine populacije, početnog broja zaraženih, vjerojatnosti zaraze, stope oporavka i smrtnosti te broja dana simulacije. Također, generiramo podatke o dobnim skupinama, stopama kontakata i podložnosti za svakog pojedinca.
+
+```{r}
+library(ggplot2)
+
+# Postavljanje parametara simulacije 
+population_size <- 1000
+initial_infected <- 10
+infection_prob <- 0.05
+recovery_rate <- 0.1  
+death_rate <- 0.01
+num_days <- 100
+
+# Generiranje podataka o dobi i stopi kontakata
+age_groups <- sample(
+  c("0-19", "20-39", "40-59", "60+"),
+  population_size,
+  replace = TRUE,
+  prob = c(0.2, 0.3, 0.3, 0.2)
+  )
+
+contact_rate <- ifelse(age_groups == "0-19",6,
+                       ifelse(age_groups == "20-39", 8,
+                              ifelse(age_groups == "40-59", 5, 3)))
+
+susceptibility <- ifelse(age_groups == "60+", 1.5, 1)
+```
+
+
+
+
