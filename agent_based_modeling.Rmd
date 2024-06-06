@@ -155,3 +155,31 @@ Nakon prolaska kroz sve pojedince, ukupni brojevi podložnih, zaraženih, oporav
 
 Ovaj proces se ponavlja za svaki dan simulacije, omogućavajući praćenje dinamike epidemije tijekom vremena.
 
+\newpage
+
+## Vizualizacija rezultata
+
+\bigskip
+
+### Dinamika širenja epidemije
+
+```{r}
+ggplot(data, aes(x = day)) +
+  geom_line(aes(y = susceptible, colour = "Susceptible")) +
+  geom_line(aes(y = infected, colour = "Infected")) +
+  geom_line(aes(y = recovered, colour = "Recovered")) +
+  geom_line(aes(y = dead, colour = "Dead")) +
+  labs(title = "Epidemic Spread Simulation", x = "Day", y = "Number of Individuals") +
+  scale_colour_manual(values = c(
+    "Susceptible" = "blue",
+    "Infected" = "red",
+    "Recovered" = "green",
+    "Dead" = "black"))
+```
+
+Ovaj grafikon pruža pregled dinamike širenja epidemije tijekom cijele simulacije. Na grafikonu se prikazuju četiri linije koje predstavljaju broj pojedinaca u svakom stanju (podložni, zaraženi, oporavljeni i mrtvi) u svakom danu simulacije.
+
+Plava linija pokazuje kako se broj podložnih pojedinaca smanjuje kako se epidemija širi, jer su podložni pojedinci izloženi zarazi od strane zaraženih osoba. Crvena linija prikazuje broj zaraženih pojedinaca, koji raste u početnim danima simulacije dok epidemija dostiže svoj vrhunac, a zatim opada kako se više ljudi oporavlja ili umire.
+
+Zelena linija predstavlja broj oporavljenih pojedinaca tijekom vremena, dok crna linija prikazuje kumulativni broj umrlih osoba koji kontinuirano raste tijekom simulacije. Oblik ovih linija ovisi o zadanim parametrima poput stope zaraze, oporavka i smrtnosti.
+
