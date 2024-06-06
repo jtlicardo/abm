@@ -183,3 +183,41 @@ Plava linija pokazuje kako se broj podložnih pojedinaca smanjuje kako se epidem
 
 Zelena linija predstavlja broj oporavljenih pojedinaca tijekom vremena, dok crna linija prikazuje kumulativni broj umrlih osoba koji kontinuirano raste tijekom simulacije. Oblik ovih linija ovisi o zadanim parametrima poput stope zaraze, oporavka i smrtnosti.
 
+\bigskip
+
+### Dnevni broj novozaraženih, oporavljenih i umrlih
+
+```{r}
+data$new_infected <- c(NA, diff(data$infected) + diff(data$recovered) + diff(data$dead))
+data$new_recovered <- c(NA, diff(data$recovered))
+data$new_dead <- c(NA, diff(data$dead))
+
+daily_data <- data.frame(day = 1:num_days, 
+                         new_infected = data$new_infected[-1], 
+                         new_recovered = data$new_recovered[-1], 
+                         new_dead = data$new_dead[-1])
+
+ggplot(daily_data, aes(x = day)) +
+  geom_line(aes(y = new_infected, colour = "New Infections")) +
+  geom_line(aes(y = new_recovered, colour = "New Recoveries")) +
+  geom_line(aes(y = new_dead, colour = "New Deaths")) +
+  labs(title = "Daily New Infections, Recoveries, and Deaths",
+       x = "Day",
+       y = "Number of Individuals") +
+  scale_colour_manual(values = c(
+    "New Infections" = "orange",
+    "New Recoveries" = "green",
+    "New Deaths" = "black"))
+```
+
+Ovo je prikaz dnevnih promjena broja novozaraženih, oporavljenih i umrlih pojedinca svakog dana tijekom simulacije epidemije. Na njemu se nalaze tri linije koje predstavljaju dnevne brojeve za svako od tih stanja.
+
+Narančasta linija prikazuje broj novih slučajeva zaraze svakog dana. Vidljivo je kako taj broj raste u početnim danima simulacije, doseže vrhunac, a zatim opada kako se epidemija usporava. Zelena linija predstavlja dnevni broj oporavljenih pojedinaca, koji također pokazuje sličan uzorak rasta, vrhunca i pada, pomaknut malo u odnosu na nove zaraze.
+
+Crna linija prikazuje dnevni broj smrtnih slučajeva tijekom simulacije. Iako je ovaj broj relativno nizak u usporedbi s drugim stanjima, on kontinuirano raste kako epidemija napreduje i doseže svoj vrhunac.
+
+Analizom ovih dnevnih brojeva možemo pratiti dinamiku širenja epidemije i uočiti kritične točke poput vrhunca novih zaraza ili dana s najviše smrtnih slučajeva. Ovi podaci mogu biti korisni za procjenu opterećenja zdravstvenog sustava i planiranje odgovarajućih mjera za suzbijanje epidemije.
+
+
+
+
