@@ -242,5 +242,35 @@ Linija je izražena u ljubičastoj boji, a na x-osi se nalazi broj dana simulaci
 
 U određenoj točki, krivulja dostiže svoj maksimum, što označava vrhunac epidemije kada je ukupni broj slučajeva najveći. Nakon toga, krivulja nastavlja rasti, ali sporijom stopom, s obzirom da se većina zaraženih ljudi ili oporavila ili preminula.
 
+\bigskip
+
+### Distribucija smrtnosti po dobnim skupinama
+
+```{r}
+age_death_data <- data.frame(
+  age_group = unique(age_groups),
+  deaths = numeric(length(unique(age_groups))))
+
+for (age_group in unique(age_groups)) {
+  age_death_data[age_death_data$age_group == age_group, "deaths"] <- sum(
+    status[age_groups == age_group] == "dead"
+    )
+}
+
+ggplot(age_death_data, aes(x = age_group, y = deaths)) +
+  geom_bar(stat = "identity", fill = "gray") +
+  labs(title = "Age Distribution of Deaths",
+       x = "Age Group",
+       y = "Number of Deaths") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+Ovaj grafikon prikazuje distribuciju smrtnih slučajeva po dobnim skupinama u ovoj simulaciji epidemije. Svaki stupac na grafu predstavlja ukupan broj smrtnih slučajeva koji su se dogodili u određenoj dobnoj skupini tijekom cijele simulacije.
+
+Podaci za ovaj grafikon generirani su u prvom dijelu koda, gdje se stvara nova podatkovna struktura `age_death_data` koja sadrži dobne skupine i odgovarajući broj smrtnih slučajeva za svaku skupinu. Petlja prolazi kroz jedinstvene dobne skupine i računa broj smrtnih slučajeva za svaku od njih sumiranjem pojedinaca koji imaju status "dead" u toj dobnoj skupini.
+
+Nakon toga, koristi se `ggplot2` za crtanje stupčastog grafikona. Na x-osi nalaze se dobne skupine, a na y-osi broj smrtnih slučajeva.
+
+
 
 
